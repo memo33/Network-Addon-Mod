@@ -1431,7 +1431,7 @@
 ;avenue curve, onewayroad diagonal/orthogonal offsplit
 0x5F474100,1,0,0x091a5700,1,0=0x5F474100,1,0,0x5F474000,1,0
 0x5F977800,1,0,0x5F474100,3,0=0x5F474000,3,0,0x5F474100,3,0
-;avenue curve, dirtroad offsplits prevents
+;avenue curve, onewayroad offsplits prevents
 0x5F471400,1,0,0x04006600,1,0=0,0,0,0,0,0
 0x5F474100,1,0,0x04006600,1,0=0,0,0,0,0,0
 ;avenue curve, MIS orthogonal offsplit
