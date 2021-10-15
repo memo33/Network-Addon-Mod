@@ -1431,8 +1431,19 @@
 ;avenue curve, onewayroad diagonal/orthogonal offsplit
 0x5F474100,1,0,0x091a5700,1,0=0x5F474100,1,0,0x5F474000,1,0
 0x5F977800,1,0,0x5F474100,3,0=0x5F474000,3,0,0x5F474100,3,0
-;avenue curve, onewayroad offsplits prevents
+;avenue curve, dirtroad offsplits prevents
 0x5F471400,1,0,0x04006600,1,0=0,0,0,0,0,0
+0x5F474100,1,0,0x04006600,1,0=0,0,0,0,0,0
+;avenue curve, MIS orthogonal offsplit
+0x57004300,1,1,0x57629000,3,0=0x57629100,3,0,0x57629000,3,0
+0x57603300,3,0,0x04007600,3,1=0x57629100,3,0,0x57629000,3,0
+;avenue curve, MIS diagonal offsplit
+;0x5F474100,1,0,0x04007800,1,1=0x5F474100,1,0,0x5F471600,1,0
+;avenue curve, MIS diagonal/orthogonal offsplit
+;0x5F474100,1,0,0x091a5700,1,0=0x5F474100,1,0,0x5F474000,1,0
+;0x5F977800,1,0,0x5F474100,3,0=0x5F474000,3,0,0x5F474100,3,0
+;avenue curve, MIS offsplits prevents
+0x57629000,1,0,0x04006600,1,0=0,0,0,0,0,0
 0x5F474100,1,0,0x04006600,1,0=0,0,0,0,0,0
 ;avenue y-junction1 x onewayroad orthogonal ~ may be able to uncomment this.
 0x04009000,0,0,0x5F471800,0,0=0,0,0,0,0,0
