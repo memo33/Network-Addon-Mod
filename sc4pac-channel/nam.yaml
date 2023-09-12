@@ -1,0 +1,255 @@
+# An experimental script for installing the NAM using the `sc4pac` package manager:
+# https://github.com/memo33/sc4pac-tools (tested with version 0.1.4)
+#
+# Usage:
+#
+#   sc4pac channel add "https://raw.githubusercontent.com/memo33/Network-Addon-Mod/sc4pac-experimental/sc4pac-channel"
+#   sc4pac search namteam
+#   sc4pac add namteam:network-addon-mod           # or other selections of packages (see summary below)
+#   sc4pac update
+
+
+# Summary of included packages:
+# - network-addon-mod        --> includes everything
+# - network-addon-mod-core   --> includes only mandatory stuff
+#
+# The Core depends on (internal) packages like:
+# - network-addon-mod-controller
+# - network-addon-mod-textures
+# which in turn depend on the Core again, so they can only be installed together with the Core.
+#
+# Moreover, there are optional packages. These only depend on the Core:
+# - real-highway-mod
+# - network-widening-mod
+# - street-addon-mod
+# - additional-transit-stations
+# - ...
+#
+# Mutually exclusive options are encoded as package `variants`. See network-addon-mod-textures for example.
+
+
+assetId: "network-addon-mod-stex"
+version: "47.0"
+lastModified: "2023-03-28T04:32:10Z"
+url: "https://community.simtropolis.com/files/file/26793-network-addon-mod-nam-cross-platform/?do=download"
+
+---
+name: "network-addon-mod"
+group: "namteam"
+version: "47.0"
+subfolder: "770-network-addon-mod"
+dependencies:
+- "namteam:network-addon-mod-core"
+- "namteam:real-highway-mod"             # optional
+- "namteam:network-widening-mod"         # optional
+- "namteam:street-addon-mod"             # optional
+- "namteam:additional-transit-stations"  # optional
+info:
+  summary: "Install the full feature set of the NAM: a myriad of new transport network items and transit-related bugfixes"
+  description: >
+    This meta-package bundles all the core and optional components of the NAM.
+
+    If you want to exclude some optional components,
+    install the optional packages individually instead of installing this package,
+    e.g. `sc4pac add namteam:street-addon-mod` to install the NAM core and the SAM,
+    or `sc4pac add namteam:network-addon-mod` to install just the NAM core functionality.
+  website: "https://www.sc4nam.com/"
+
+---
+name: "network-addon-mod-core"
+group: "namteam"
+version: "47.0"
+subfolder: "770-network-addon-mod"
+info:
+  summary: "Base content of the NAM excluding optional components"
+  description: >
+    This package bundles all the mandatory sub-packages of the NAM.
+dependencies:
+- "namteam:network-addon-mod-controller"
+- "namteam:network-addon-mod-textures"
+assets:
+- assetId: "network-addon-mod-stex"
+  include:
+  - "/installation/"
+  exclude:
+    # Exclude non-default options.
+  - "/!"          # deselected checkbox like legacy content
+  - "/(@\\d+)?-"  # deselected radio button (possibly ordered)
+    # Additionally list files below that are contained in other NAM packages.
+  - "0 NAM Controller_(RHD|LHD)"               # separate package for controller
+  - "Texture and Drive Side Support/"          # separate package for textures
+  - "Network Features/RealHighway"             # separate package for RHW
+  - "Network Features/.*Network Widening Mod"  # separate package for NWM
+  - "Network Features/.*Street Addon Mod"      # separate package for SAM
+  - "Additional Transit Stations/"             # separate package for additional stations
+
+---
+name: "network-addon-mod-controller"
+group: "namteam"
+version: "47.0"
+subfolder: "770-network-addon-mod"
+info:
+  summary: "The NAM controller contains the main internal network logic"
+  warning: >
+    If you chose the RHW-variant of the NAM controller,
+    you *must* apply the 4 GB patch to avoid crashes when loading a city tile.
+
+    More information at https://www.sc4nam.com/docs/getting-started/installation/#4gb-patch
+
+    You can ignore this warning if you chose not to install the RHW.
+
+variants:
+- variant: { driveside: "right", NAM.install-RHW: "yes" }
+  dependencies: [ "namteam:network-addon-mod-core" ]  # this package is a mandatory part of NAM-core
+  assets:
+  - assetId: "network-addon-mod-stex"
+    include:
+    - "/@1=0 NAM Controller_RHD_4GB_Full/"
+- variant: { driveside: "left",  NAM.install-RHW: "yes" }
+  dependencies: [ "namteam:network-addon-mod-core" ]  # this package is a mandatory part of NAM-core
+  assets:
+  - assetId: "network-addon-mod-stex"
+    include:
+    - "/@2-0 NAM Controller_LHD_4GB_Full/"
+- variant: { driveside: "right", NAM.install-RHW: "no" }
+  dependencies: [ "namteam:network-addon-mod-core" ]  # this package is a mandatory part of NAM-core
+  assets:
+  - assetId: "network-addon-mod-stex"
+    include:
+    - "/@3-0 NAM Controller_RHD_LowRAM_NoRHW/"
+- variant: { driveside: "left",  NAM.install-RHW: "no" }
+  dependencies: [ "namteam:network-addon-mod-core" ]  # this package is a mandatory part of NAM-core
+  assets:
+  - assetId: "network-addon-mod-stex"
+    include:
+    - "/@4-0 NAM Controller_LHD_LowRAM_NoRHW/"
+
+variantDescriptions:
+  NAM.install-RHW:
+    "yes": Only choose this option if you have manually patched your game to use 4 GB of RAM. Otherwise your game will crash when entering a city tile.
+    "no": Requires less RAM and starting the game is faster.
+
+---
+name: "network-addon-mod-textures"
+group: "namteam"
+version: "47.0"
+subfolder: "770-network-addon-mod"
+info:
+  summary: "NAM textures and drive side support"
+variants:
+- variant: { driveside: "right", NAM.roadstyle: "US" }
+  dependencies: [ "namteam:network-addon-mod-core" ]  # this package is a mandatory part of NAM-core
+  assets:
+  - assetId: "network-addon-mod-stex"
+    include:
+    - "/8 Texture and Drive Side Support/"
+    exclude:
+    - "/-EU/"
+    - "/@2-US_LeftSide/"
+    - "/!"  # deselected checkbox
+    - "/-"  # deselected radio button
+- variant: { driveside: "left",  NAM.roadstyle: "US" }
+  dependencies: [ "namteam:network-addon-mod-core" ]  # this package is a mandatory part of NAM-core
+  assets:
+  - assetId: "network-addon-mod-stex"
+    include:
+    - "Texture and Drive Side Support/"
+    exclude:
+    - "/-EU/"
+    - "/@1=US_RightSide/"
+    - "/!"  # deselected checkbox
+    - "/-"  # deselected radio button
+- variant: { driveside: "right", NAM.roadstyle: "EU" }
+  dependencies: [ "namteam:network-addon-mod-core" ]  # this package is a mandatory part of NAM-core
+  assets:
+  - assetId: "network-addon-mod-stex"
+    include:
+    - "/8 Texture and Drive Side Support/"
+    exclude:
+    - "/=US/"
+    - "/@2-EU_LeftSide/"
+    - "/!"            # deselected checkbox
+    - "/-EU(/.*)?/-"  # deselected radio button inside /-EU/ folder
+- variant: { driveside: "left",  NAM.roadstyle: "EU" }
+  dependencies: [ "namteam:network-addon-mod-core" ]  # this package is a mandatory part of NAM-core
+  assets:
+  - assetId: "network-addon-mod-stex"
+    include:
+    - "/8 Texture and Drive Side Support/"
+    exclude:
+    - "/=US/"
+    - "/@1=EU_RightSide/"
+    - "/!"            # deselected checkbox
+    - "/-EU(/.*)?/-"  # deselected radio button inside /-EU/ folder
+
+---
+name: "real-highway-mod"
+group: "namteam"
+version: "47.0"
+subfolder: "770-network-addon-mod"
+info:
+  summary: "Add a series of new highway networks and interchanges"
+variants:
+- variant: { NAM.install-RHW: "yes" }
+  dependencies: [ "namteam:network-addon-mod-core" ]
+  assets:
+  - assetId: "network-addon-mod-stex"
+    include:
+    - "Network Features/RealHighway"
+    exclude:
+    - "/!"          # deselected checkbox like legacy content
+    - "/(@\\d+)?-"  # deselected radio button (possibly ordered)
+- variant: { NAM.install-RHW: "no" }
+
+variantDescriptions:
+  NAM.install-RHW:
+    "yes": Only choose this option if you have manually patched your game to use 4 GB of RAM. Otherwise your game will crash when entering a city tile.
+    "no": Requires less RAM and starting the game is faster.
+
+---
+name: "network-widening-mod"
+group: "namteam"
+version: "47.0"
+subfolder: "770-network-addon-mod"
+info:
+  summary: "Add a number of surface-road networks providing different widths and higher capacity"
+dependencies: [ "namteam:network-addon-mod-core" ]
+assets:
+- assetId: "network-addon-mod-stex"
+  include:
+  - "Network Features/.*Network Widening Mod"
+  exclude:
+  - "/!"          # deselected checkbox like legacy content
+  - "/(@\\d+)?-"  # deselected radio button (possibly ordered)
+
+---
+name: "street-addon-mod"
+group: "namteam"
+version: "47.0"
+subfolder: "770-network-addon-mod"
+info:
+  summary: "Add a variety of cosmetic override networks based on the Street network"
+dependencies: [ "namteam:network-addon-mod-core" ]
+assets:
+- assetId: "network-addon-mod-stex"
+  include:
+  - "Network Features/.*Street Addon Mod"
+  exclude:
+  - "/!"          # deselected checkbox like legacy content
+  - "/(@\\d+)?-"  # deselected radio button (possibly ordered)
+
+---
+name: "additional-transit-stations"
+group: "namteam"
+version: "47.0"
+subfolder: "770-network-addon-mod"
+info:
+  summary: "Add a multitude of new transit stations beyond the game's default"
+dependencies: [ "namteam:network-addon-mod-core" ]
+assets:
+- assetId: "network-addon-mod-stex"
+  include:
+  - "Additional Transit Stations/"
+  exclude:
+  - "/!"          # deselected checkbox like legacy content
+  - "/(@\\d+)?-"  # deselected radio button (possibly ordered)

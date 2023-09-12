@@ -1,0 +1,102 @@
+{
+  "group": "namteam",
+  "name": "network-addon-mod-controller",
+  "version": "47.0",
+  "subfolder": "770-network-addon-mod",
+  "info": {
+    "summary": "The NAM controller contains the main internal network logic",
+    "warning": "If you chose the RHW-variant of the NAM controller, you *must* apply the 4 GB patch to avoid crashes when loading a city tile.\nMore information at https://www.sc4nam.com/docs/getting-started/installation/#4gb-patch\nYou can ignore this warning if you chose not to install the RHW.\n"
+  },
+  "variants": [
+    {
+      "variant": {
+        "driveside": "right",
+        "NAM.install-RHW": "yes"
+      },
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-core",
+          "version": "latest.release"
+        }
+      ],
+      "assets": [
+        {
+          "assetId": "network-addon-mod-stex",
+          "include": [
+            "/@1=0 NAM Controller_RHD_4GB_Full/"
+          ]
+        }
+      ]
+    },
+    {
+      "variant": {
+        "driveside": "left",
+        "NAM.install-RHW": "yes"
+      },
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-core",
+          "version": "latest.release"
+        }
+      ],
+      "assets": [
+        {
+          "assetId": "network-addon-mod-stex",
+          "include": [
+            "/@2-0 NAM Controller_LHD_4GB_Full/"
+          ]
+        }
+      ]
+    },
+    {
+      "variant": {
+        "driveside": "right",
+        "NAM.install-RHW": "no"
+      },
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-core",
+          "version": "latest.release"
+        }
+      ],
+      "assets": [
+        {
+          "assetId": "network-addon-mod-stex",
+          "include": [
+            "/@3-0 NAM Controller_RHD_LowRAM_NoRHW/"
+          ]
+        }
+      ]
+    },
+    {
+      "variant": {
+        "driveside": "left",
+        "NAM.install-RHW": "no"
+      },
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-core",
+          "version": "latest.release"
+        }
+      ],
+      "assets": [
+        {
+          "assetId": "network-addon-mod-stex",
+          "include": [
+            "/@4-0 NAM Controller_LHD_LowRAM_NoRHW/"
+          ]
+        }
+      ]
+    }
+  ],
+  "variantDescriptions": {
+    "NAM.install-RHW": {
+      "yes": "Only choose this option if you have manually patched your game to use 4 GB of RAM. Otherwise your game will crash when entering a city tile.",
+      "no": "Requires less RAM and starting the game is faster."
+    }
+  }
+}

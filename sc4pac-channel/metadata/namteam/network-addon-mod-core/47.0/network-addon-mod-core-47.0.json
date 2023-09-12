@@ -1,0 +1,45 @@
+{
+  "group": "namteam",
+  "name": "network-addon-mod-core",
+  "version": "47.0",
+  "subfolder": "770-network-addon-mod",
+  "info": {
+    "summary": "Base content of the NAM excluding optional components",
+    "description": "This package bundles all the mandatory sub-packages of the NAM.\n"
+  },
+  "variants": [
+    {
+      "variant": {},
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-controller",
+          "version": "latest.release"
+        },
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-textures",
+          "version": "latest.release"
+        }
+      ],
+      "assets": [
+        {
+          "assetId": "network-addon-mod-stex",
+          "include": [
+            "/installation/"
+          ],
+          "exclude": [
+            "/!",
+            "/(@\\d+)?-",
+            "0 NAM Controller_(RHD|LHD)",
+            "Texture and Drive Side Support/",
+            "Network Features/RealHighway",
+            "Network Features/.*Network Widening Mod",
+            "Network Features/.*Street Addon Mod",
+            "Additional Transit Stations/"
+          ]
+        }
+      ]
+    }
+  ]
+}

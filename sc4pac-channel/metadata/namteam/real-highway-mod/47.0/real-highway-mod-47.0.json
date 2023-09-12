@@ -1,0 +1,46 @@
+{
+  "group": "namteam",
+  "name": "real-highway-mod",
+  "version": "47.0",
+  "subfolder": "770-network-addon-mod",
+  "info": {
+    "summary": "Add a series of new highway networks and interchanges"
+  },
+  "variants": [
+    {
+      "variant": {
+        "NAM.install-RHW": "yes"
+      },
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-core",
+          "version": "latest.release"
+        }
+      ],
+      "assets": [
+        {
+          "assetId": "network-addon-mod-stex",
+          "include": [
+            "Network Features/RealHighway"
+          ],
+          "exclude": [
+            "/!",
+            "/(@\\d+)?-"
+          ]
+        }
+      ]
+    },
+    {
+      "variant": {
+        "NAM.install-RHW": "no"
+      }
+    }
+  ],
+  "variantDescriptions": {
+    "NAM.install-RHW": {
+      "yes": "Only choose this option if you have manually patched your game to use 4 GB of RAM. Otherwise your game will crash when entering a city tile.",
+      "no": "Requires less RAM and starting the game is faster."
+    }
+  }
+}

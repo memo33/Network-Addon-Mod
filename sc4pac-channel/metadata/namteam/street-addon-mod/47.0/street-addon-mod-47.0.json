@@ -1,0 +1,33 @@
+{
+  "group": "namteam",
+  "name": "street-addon-mod",
+  "version": "47.0",
+  "subfolder": "770-network-addon-mod",
+  "info": {
+    "summary": "Add a variety of cosmetic override networks based on the Street network"
+  },
+  "variants": [
+    {
+      "variant": {},
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-core",
+          "version": "latest.release"
+        }
+      ],
+      "assets": [
+        {
+          "assetId": "network-addon-mod-stex",
+          "include": [
+            "Network Features/.*Street Addon Mod"
+          ],
+          "exclude": [
+            "/!",
+            "/(@\\d+)?-"
+          ]
+        }
+      ]
+    }
+  ]
+}

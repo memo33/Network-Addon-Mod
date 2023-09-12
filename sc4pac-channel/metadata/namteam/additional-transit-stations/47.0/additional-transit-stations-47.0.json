@@ -1,0 +1,33 @@
+{
+  "group": "namteam",
+  "name": "additional-transit-stations",
+  "version": "47.0",
+  "subfolder": "770-network-addon-mod",
+  "info": {
+    "summary": "Add a multitude of new transit stations beyond the game's default"
+  },
+  "variants": [
+    {
+      "variant": {},
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-core",
+          "version": "latest.release"
+        }
+      ],
+      "assets": [
+        {
+          "assetId": "network-addon-mod-stex",
+          "include": [
+            "Additional Transit Stations/"
+          ],
+          "exclude": [
+            "/!",
+            "/(@\\d+)?-"
+          ]
+        }
+      ]
+    }
+  ]
+}

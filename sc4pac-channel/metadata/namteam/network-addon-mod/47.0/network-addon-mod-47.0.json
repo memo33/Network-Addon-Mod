@@ -1,0 +1,43 @@
+{
+  "group": "namteam",
+  "name": "network-addon-mod",
+  "version": "47.0",
+  "subfolder": "770-network-addon-mod",
+  "info": {
+    "summary": "Install the full feature set of the NAM: a myriad of new transport network items and transit-related bugfixes",
+    "description": "This meta-package bundles all the core and optional components of the NAM.\nIf you want to exclude some optional components, install the optional packages individually instead of installing this package, e.g. `sc4pac add namteam:street-addon-mod` to install the NAM core and the SAM, or `sc4pac add namteam:network-addon-mod` to install just the NAM core functionality.\n",
+    "website": "https://www.sc4nam.com/"
+  },
+  "variants": [
+    {
+      "variant": {},
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-core",
+          "version": "latest.release"
+        },
+        {
+          "group": "namteam",
+          "name": "real-highway-mod",
+          "version": "latest.release"
+        },
+        {
+          "group": "namteam",
+          "name": "network-widening-mod",
+          "version": "latest.release"
+        },
+        {
+          "group": "namteam",
+          "name": "street-addon-mod",
+          "version": "latest.release"
+        },
+        {
+          "group": "namteam",
+          "name": "additional-transit-stations",
+          "version": "latest.release"
+        }
+      ]
+    }
+  ]
+}

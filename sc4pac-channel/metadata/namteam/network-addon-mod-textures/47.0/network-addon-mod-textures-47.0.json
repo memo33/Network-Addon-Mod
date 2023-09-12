@@ -1,0 +1,119 @@
+{
+  "group": "namteam",
+  "name": "network-addon-mod-textures",
+  "version": "47.0",
+  "subfolder": "770-network-addon-mod",
+  "info": {
+    "summary": "NAM textures and drive side support"
+  },
+  "variants": [
+    {
+      "variant": {
+        "driveside": "right",
+        "NAM.roadstyle": "US"
+      },
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-core",
+          "version": "latest.release"
+        }
+      ],
+      "assets": [
+        {
+          "assetId": "network-addon-mod-stex",
+          "include": [
+            "/8 Texture and Drive Side Support/"
+          ],
+          "exclude": [
+            "/-EU/",
+            "/@2-US_LeftSide/",
+            "/!",
+            "/-"
+          ]
+        }
+      ]
+    },
+    {
+      "variant": {
+        "driveside": "left",
+        "NAM.roadstyle": "US"
+      },
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-core",
+          "version": "latest.release"
+        }
+      ],
+      "assets": [
+        {
+          "assetId": "network-addon-mod-stex",
+          "include": [
+            "Texture and Drive Side Support/"
+          ],
+          "exclude": [
+            "/-EU/",
+            "/@1=US_RightSide/",
+            "/!",
+            "/-"
+          ]
+        }
+      ]
+    },
+    {
+      "variant": {
+        "driveside": "right",
+        "NAM.roadstyle": "EU"
+      },
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-core",
+          "version": "latest.release"
+        }
+      ],
+      "assets": [
+        {
+          "assetId": "network-addon-mod-stex",
+          "include": [
+            "/8 Texture and Drive Side Support/"
+          ],
+          "exclude": [
+            "/=US/",
+            "/@2-EU_LeftSide/",
+            "/!",
+            "/-EU(/.*)?/-"
+          ]
+        }
+      ]
+    },
+    {
+      "variant": {
+        "driveside": "left",
+        "NAM.roadstyle": "EU"
+      },
+      "dependencies": [
+        {
+          "group": "namteam",
+          "name": "network-addon-mod-core",
+          "version": "latest.release"
+        }
+      ],
+      "assets": [
+        {
+          "assetId": "network-addon-mod-stex",
+          "include": [
+            "/8 Texture and Drive Side Support/"
+          ],
+          "exclude": [
+            "/=US/",
+            "/@1=EU_RightSide/",
+            "/!",
+            "/-EU(/.*)?/-"
+          ]
+        }
+      ]
+    }
+  ]
+}
