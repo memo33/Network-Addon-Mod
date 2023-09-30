@@ -2,18 +2,11 @@
   "contents": [
     {
       "group": "namteam",
-      "name": "network-addon-mod-controller",
+      "name": "additional-transit-stations",
       "versions": [
         "47.0"
       ],
-      "summary": "The NAM controller contains the main internal network logic"
-    },
-    {
-      "group": "sc4pacAsset",
-      "name": "network-addon-mod-stex",
-      "versions": [
-        "47.0"
-      ]
+      "summary": "Add a multitude of new transit stations beyond the game's default"
     },
     {
       "group": "namteam",
@@ -25,19 +18,11 @@
     },
     {
       "group": "namteam",
-      "name": "real-highway-mod",
+      "name": "network-addon-mod-controller",
       "versions": [
         "47.0"
       ],
-      "summary": "Add a series of new highway networks and interchanges"
-    },
-    {
-      "group": "namteam",
-      "name": "network-addon-mod-textures",
-      "versions": [
-        "47.0"
-      ],
-      "summary": "NAM textures and drive side support"
+      "summary": "The NAM controller contains the main internal network logic"
     },
     {
       "group": "namteam",
@@ -49,11 +34,27 @@
     },
     {
       "group": "namteam",
+      "name": "network-addon-mod-textures",
+      "versions": [
+        "47.0"
+      ],
+      "summary": "NAM textures and drive side support"
+    },
+    {
+      "group": "namteam",
       "name": "network-widening-mod",
       "versions": [
         "47.0"
       ],
       "summary": "Add a number of surface-road networks providing different widths and higher capacity"
+    },
+    {
+      "group": "namteam",
+      "name": "real-highway-mod",
+      "versions": [
+        "47.0"
+      ],
+      "summary": "Add a series of new highway networks and interchanges"
     },
     {
       "group": "namteam",
@@ -64,12 +65,11 @@
       "summary": "Add a variety of cosmetic override networks based on the Street network"
     },
     {
-      "group": "namteam",
-      "name": "additional-transit-stations",
+      "group": "sc4pacAsset",
+      "name": "network-addon-mod-stex",
       "versions": [
         "47.0"
-      ],
-      "summary": "Add a multitude of new transit stations beyond the game's default"
+      ]
     }
   ]
 }

@@ -137,7 +137,7 @@ subfolder: "770-network-addon-mod"
 info:
   summary: "NAM textures and drive side support"
 variants:
-- variant: { driveside: "right", NAM.roadstyle: "US" }
+- variant: { driveside: "right", roadstyle: "US" }
   dependencies: [ "namteam:network-addon-mod-core" ]  # this package is a mandatory part of NAM-core
   assets:
   - assetId: "network-addon-mod-stex"
@@ -148,7 +148,7 @@ variants:
     - "/@2-US_LeftSide/"
     - "/!"  # deselected checkbox
     - "/-"  # deselected radio button
-- variant: { driveside: "left",  NAM.roadstyle: "US" }
+- variant: { driveside: "left",  roadstyle: "US" }
   dependencies: [ "namteam:network-addon-mod-core" ]  # this package is a mandatory part of NAM-core
   assets:
   - assetId: "network-addon-mod-stex"
@@ -159,7 +159,7 @@ variants:
     - "/@1=US_RightSide/"
     - "/!"  # deselected checkbox
     - "/-"  # deselected radio button
-- variant: { driveside: "right", NAM.roadstyle: "EU" }
+- variant: { driveside: "right", roadstyle: "EU" }
   dependencies: [ "namteam:network-addon-mod-core" ]  # this package is a mandatory part of NAM-core
   assets:
   - assetId: "network-addon-mod-stex"
@@ -170,7 +170,7 @@ variants:
     - "/@2-EU_LeftSide/"
     - "/!"            # deselected checkbox
     - "/-EU(/.*)?/-"  # deselected radio button inside /-EU/ folder
-- variant: { driveside: "left",  NAM.roadstyle: "EU" }
+- variant: { driveside: "left",  roadstyle: "EU" }
   dependencies: [ "namteam:network-addon-mod-core" ]  # this package is a mandatory part of NAM-core
   assets:
   - assetId: "network-addon-mod-stex"

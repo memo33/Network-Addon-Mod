@@ -10,7 +10,7 @@
     {
       "variant": {
         "driveside": "right",
-        "NAM.roadstyle": "US"
+        "roadstyle": "US"
       },
       "dependencies": [
         {
@@ -37,7 +37,7 @@
     {
       "variant": {
         "driveside": "left",
-        "NAM.roadstyle": "US"
+        "roadstyle": "US"
       },
       "dependencies": [
         {
@@ -64,7 +64,7 @@
     {
       "variant": {
         "driveside": "right",
-        "NAM.roadstyle": "EU"
+        "roadstyle": "EU"
       },
       "dependencies": [
         {
@@ -91,7 +91,7 @@
     {
       "variant": {
         "driveside": "left",
-        "NAM.roadstyle": "EU"
+        "roadstyle": "EU"
       },
       "dependencies": [
         {
