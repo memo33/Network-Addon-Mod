@@ -9,6 +9,13 @@ import syntax.IdTile
   */
 object SanityChecker {
 
+  sealed trait Driveside
+  case object Rhd extends Driveside
+  case object Lhd extends Driveside
+  case object RhdAndLhd extends Driveside
+
+  val linePatternIncludingNewlines = "(?<=\n|\r(?!\n))"
+
   def main(args: Array[String]): Unit = {
     checkRedundantRul2()
   }
@@ -47,14 +54,16 @@ object SanityChecker {
       if (isRulFile(path) && !isMetaruleFile(path)) {
         val tmpPath = path.resolveSibling(path.getFileName().toString() + ".tmp")
         val endsWithNewline = fileEndsWithNewline(path)  // attempt to preserve missing newlines at end of files to avoid noise
-        for (scanner <- managed(new java.util.Scanner(path.toFile(), "UTF-8")); printer <- managed(new java.io.PrintWriter(tmpPath.toFile(), "UTF-8"))) {
-          while (scanner.hasNextLine()) {
-            val line = scanner.nextLine()
-            val printFun: String => Unit = if (!endsWithNewline && !scanner.hasNextLine()) printer.print else printer.println  // preserve missing newlines at end of file
+        scala.util.Using.resources(
+          new java.util.Scanner(path.toFile(), "UTF-8").useDelimiter(linePatternIncludingNewlines),
+          new java.io.PrintWriter(tmpPath.toFile(), "UTF-8")
+        ) { (lineScanner, printer) =>
+          while (lineScanner.hasNext()) {
+            val line = lineScanner.next()
             if (parseRule(line).exists(rule => seen(new EquivRule(rule)))) {
-              printFun(s";$line; metaruled")  // comments out the line
+              printer.println(s";${line.stripLineEnd}; metaruled")  // comments out the line
             } else {
-              printFun(line)
+              printer.print(line)  // preserving original linebreaks
             }
           }
         }
