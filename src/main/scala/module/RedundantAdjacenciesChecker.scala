@@ -48,19 +48,6 @@ object RedundantAdjacenciesChecker {
     }
   }
 
-  // def foreachLineIncludingNewlines(in: java.io.BufferedReader)(f: String => Unit): Unit = {
-  //   val buf = Array.empty[Char](1024 * 16)
-  //   var count = 0
-  //   while (count != -1) {
-  //     count = in.read(buf, 0, buf.length)
-  //     var idx = 0
-  //     while (idx < buf.length) {
-  //       if (
-  //       idx += 1
-  //     }
-  //   }
-  // }
-
   def checkRedundantAdjacencies(): Unit = {
     val rulesRhd = collection.mutable.Map.empty[EquivRule, Rule[IdTile]]
     val rulesLhd = collection.mutable.Map.empty[EquivRule, Rule[IdTile]]
@@ -123,16 +110,33 @@ object RedundantAdjacenciesChecker {
     }
   }
 
-  val surrogateTiles = Seq(
-    IdTile(0x00004B00, R1F0), IdTile(0x00004B00, R3F0),  // Road
-    IdTile(0x57000000, R1F0), IdTile(0x57000000, R3F0),  // Dirtroad
-    IdTile(0x05004B00, R1F0), IdTile(0x05004B00, R3F0),  // Street
-    IdTile(0x5D540000, R1F0), IdTile(0x5D540000, R3F0),  // Rail
-    IdTile(0x08031500, R1F0), IdTile(0x08031500, R3F0),  // Lightrail
-    IdTile(0x09004B00, R1F0), IdTile(0x09004B00, R3F0),  // Onewayroad  (TODO or 0x5f940300?)
-    IdTile(0x04006100, R3F0), IdTile(0x04006100, R1F0),  // Avenue
-    IdTile(0x0D031500, R1F0), IdTile(0x0D031500, R3F0)  // Monorail
-  )
+  val orthogonalSurrogateTiles = Seq(
+    IdTile(0x00004B00, R1F0),  // Road
+    IdTile(0x57000000, R1F0),  // Dirtroad
+    IdTile(0x05004B00, R1F0),  // Street
+    IdTile(0x5D540000, R1F0),  // Rail
+    IdTile(0x08031500, R1F0),  // Lightrail
+    IdTile(0x09004B00, R1F0),  // Onewayroad  (TODO or 0x5f940300?)
+    IdTile(0x04006100, R3F0),  // Avenue
+    IdTile(0x0D031500, R1F0),  // Monorail
+  ).flatMap(t => Seq(t, t * R2F0))
+
+  val diagonalSurrogateTiles = Seq(
+    (IdTile(0x00000A00, R1F0), IdTile(0x00000A00, R3F0)),  // Road
+    (IdTile(0x57000200, R1F0), IdTile(0x57000200, R3F0)),  // Dirtroad
+    (IdTile(0x5F500200, R1F0), IdTile(0x5F500200, R3F0)),  // Street
+    (IdTile(0x5D540100, R1F0), IdTile(0x5D540100, R3F0)),  // Rail
+    (IdTile(0x08001A00, R1F0), IdTile(0x08001A00, R3F0)),  // Lightrail
+    (IdTile(0x09000A00, R1F0), IdTile(0x09000A00, R3F0)),  // Onewayroad  (TODO or 0x5f94....?)
+    (IdTile(0x04000200, R2F0), IdTile(0x04003800, R0F0)),  // Avenue~SW | Avenue~SharedDiagLeft
+    (IdTile(0x04000200, R2F0), IdTile(0x04003800, R2F0)),  // Avenue~SW | Avenue~SharedDiagLeft (here we probably need this extra rotation to remove corresponding RUL2 code)
+    (IdTile(0x04003800, R0F0), IdTile(0x04000200, R0F0)),  // Avenue~SharedDiagLeft | Avenue~SW
+    (IdTile(0x04003800, R2F0), IdTile(0x04000200, R0F0)),  // Avenue~SharedDiagLeft | Avenue~SW (here we probably need this extra rotation to remove corresponding RUL2 code)
+    (IdTile(0x0D001A00, R1F0), IdTile(0x0D001A00, R3F0)),  // Monorail
+  ).flatMap { case (a,b) => Seq(true, false).map { southBound =>
+    val rot = if (southBound) R0F0 else R1F0
+    (a * rot, b * rot, southBound)
+  }}
 
   def evaluateRule(rule: Rule[IdTile], t0: IdTile, t1: IdTile): Option[(IdTile, IdTile)] = {
     if (t0 == rule(0) && t1 == rule(1)) Some((rule(2), rule(3)))
@@ -147,17 +151,45 @@ object RedundantAdjacenciesChecker {
     lookupRule.unapply(key).flatMap(rule => evaluateRule(rule, t0, t1))
   }
 
-  /** Checks if adjacency overrides x -> y and y -> z exist (in that order and
-    * direction) (where y is surrogate tile) and matches expected result
-    * xExpected, zExpected.
+  /** Checks if adjacency overrides a -> b and b -> c exist (in that order and
+    * direction) (where b is surrogate tile) and matches expected result
+    * aExpected, cExpected.
     */
-  def connectingOverridesExist(lookupRule: PartialFunction[EquivRule, Rule[IdTile]], x: IdTile, y: IdTile, z: IdTile, xExpected: IdTile, zExpected: IdTile): Boolean = {
-    evaluateRulesOnce(lookupRule, x, y) match {
-      case Some((x1, y1)) if x1 == x && x1.id != y1.id =>
-        evaluateRulesOnce(lookupRule, y1, z) match {
-          case Some((y2, z2)) if y2 == y1 && z2 != z && y2.id != z2.id =>
-            // found two overrides connecting x to z, so check if result of their application is as expected
-            x1 == xExpected && z2 == zExpected
+  def connectingOrthOverridesExist(lookupRule: PartialFunction[EquivRule, Rule[IdTile]], a: IdTile, b: IdTile, c: IdTile, aExpected: IdTile, cExpected: IdTile): Boolean = {
+    evaluateRulesOnce(lookupRule, a, b) match {
+      case Some((a1, b1)) if a1 == a && a1.id != b1.id =>
+        evaluateRulesOnce(lookupRule, b1, c) match {
+          case Some((b2, c2)) if b2 == b1 && b2.id != c2.id && c2 != c =>
+            // found two overrides connecting a to c, so check if result of their application is as expected
+            a1 == aExpected && c2 == cExpected
+          case _ => false
+        }
+      case _ => false
+    }
+  }
+
+  /** Checks if adjacency overrides a -> b and b*rot -> c*rot and c -> d exist
+    * and matches expected result aExpected, dExpected.
+    * Here, b and c are diagonal surrogate tiles rotated for southbound or
+    * northbound direction.
+    */
+  def connectingDiagOverridesExist(lookupRule: PartialFunction[EquivRule, Rule[IdTile]], a: IdTile, b: IdTile, c: IdTile, d: IdTile, southBound: Boolean, aExpected: IdTile, dExpected: IdTile): Boolean = {
+    evaluateRulesOnce(lookupRule, a, b) match {
+      case Some((a1, b1)) if a1 == a && a1.id != b1.id =>
+        val rot = if (southBound) R3F0 else R1F0
+        evaluateRulesOnce(lookupRule, b1 * rot, c * rot) match {
+          case Some((b2rot, c2rot)) =>
+            val b2 = b2rot * (R0F0 / rot)
+            val c2 = c2rot * (R0F0 / rot)
+            if (b2 == b1 && c2 != c) {
+              evaluateRulesOnce(lookupRule, c2, d) match {
+                case Some((c3, d3)) if c3 == c2 && d3.id != c3.id && d3.id != b2.id && d3 != d =>
+                  a1 == aExpected && d3 == dExpected
+                case _ => false
+              }
+            } else {
+              false
+            }
           case _ => false
         }
       case _ => false
@@ -165,16 +197,30 @@ object RedundantAdjacenciesChecker {
   }
 
   def isRedundantAdjacency(rule: Rule[IdTile], lookupRule: PartialFunction[EquivRule, Rule[IdTile]]): Boolean = {
-    val x = rule(0)
-    val z = rule(1)
-    surrogateTiles.exists { y =>
-      if (y.id == x.id || y.id == z.id) {
-        false
-      } else {
-        (connectingOverridesExist(lookupRule, x, y, z, rule(2), rule(3))  // x -> y -> z
-          || connectingOverridesExist(lookupRule, z * R2F0, y * R2F0, x * R2F0, rule(3) * R2F0, rule(2) * R2F0))  // z -> y -> x
+    val a = rule(0)
+    def checkOrth() = {
+      val c = rule(1)
+      orthogonalSurrogateTiles.exists { b =>
+        if (b.id == a.id || b.id == c.id) {  // this would depend on the same rule
+          false
+        } else {
+          (connectingOrthOverridesExist(lookupRule, a, b, c, rule(2), rule(3))  // a -> b -> c
+            || connectingOrthOverridesExist(lookupRule, c * R2F0, b * R2F0, a * R2F0, rule(3) * R2F0, rule(2) * R2F0))  // c -> b -> a
+        }
       }
     }
+    def checkDiag() = {
+      val d = rule(1)
+      diagonalSurrogateTiles.exists { case (b, c, southBound) =>
+        if (c.id == a.id || b.id == d.id) {  // this would depend on the same rule
+          false
+        } else {
+          (connectingDiagOverridesExist(lookupRule, a, b, c, d, southBound, rule(2), rule(3))  // a -> b -> c -> d
+            || connectingDiagOverridesExist(lookupRule, d * R2F0, c * R2F0, b * R2F0, a * R2F0, southBound, rule(3) * R2F0, rule(2) * R2F0))  // d -> c -> b -> a
+        }
+      }
+    }
+    checkOrth() || checkDiag()
   }
 
 }
