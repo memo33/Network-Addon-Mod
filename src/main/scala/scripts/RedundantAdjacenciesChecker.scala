@@ -1,12 +1,13 @@
-package com.sc4nam.module
+package com.sc4nam.scripts
 
 import java.nio.file.{Files, Paths, Path}
+import com.sc4nam.module._
 import io.github.memo33.metarules.meta.{RotFlip, Rule, EquivRule, IdTile}
 import RotFlip._
 import syntax.IdTile
 import SanityChecker.{isRulFile, fileEndsWithNewline, Driveside, Rhd, Lhd, RhdAndLhd, parseRule, linePatternIncludingNewlines}
 
-/** Run with `SBT_OPTS="-Xmx2G" sbt "runMain com.sc4nam.module.RedundantAdjacenciesChecker"`.
+/** Run with `SBT_OPTS="-Xmx2G" sbt "runMain com.sc4nam.scripts.RedundantAdjacenciesChecker"`.
   * Note that this increases the heap size for more memory.
   * Takes about 4 minutes.
   */
