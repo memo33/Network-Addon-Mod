@@ -91,9 +91,9 @@ object RedundantAdjacenciesChecker {
                 case Some((rule, Rhd)) => isRedundantAdjacency(rule, lookupRuleRhd)
                 case Some((rule, Lhd)) => isRedundantAdjacency(rule, lookupRuleLhd)
                 case Some((rule, RhdAndLhd)) =>
-                  val b = isRedundantAdjacency(rule, lookupRuleLhd)
+                  val b = isRedundantAdjacency(rule, lookupRuleRhd)
                   if (b != isRedundantAdjacency(rule, lookupRuleLhd)) {
-                    throw new AssertionError("Redundancies should be the same for RHD and LHD.")  // hopefully this is always be the case
+                    throw new AssertionError("Redundancies should be the same for RHD and LHD.")  // hopefully this will always be the case
                   }
                   b
                 case None => false  // comments are not redundant
